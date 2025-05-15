@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<style>
+    /* iframe을 감싸는 컨테이너 (선택 사항이지만 구조를 명확히 합니다) */
+    .iframe-container {
+        position: relative; /* 패딩 계산 기준 */
+        width: 100%; /* 부모 너비에 맞춤 */
+        max-width: 800px; /* 원본 iframe 너비에 해당하는 최대 너비 */
+        margin: 0 auto; /* 가운데 정렬 */
+        /* 세로 비율 유지를 위한 꼼수 (너비 기준 비율) */
+        /* 이 비율은 원본 iframe의 width:height 비율(800:1100)에 따라 계산됩니다. */
+        /* (1100 / 800) * 100% = 137.5% */
+        padding-bottom: 137.5%; /* 높이를 너비의 137.5%로 설정하여 비율 유지 */
+        height: 0; /* 실제 높이는 padding-bottom으로 대체 */
+        overflow: hidden; /* 넘치는 내용 숨김 */
+    }
+
+    /* 실제 iframe 요소 */
+    .responsive-iframe {
+        position: absolute; /* 부모 컨테이너 기준 절대 위치 */
+        top: 0;
+        left: 0;
+        width: 100%; /* 부모 컨테이너에 꽉 채움 */
+        height: 100%; /* 부모 컨테이너에 꽉 채움 */
+        border: 0; /* 테두리 제거 */
+    }
+</style>
+</head>
+<body>
+
+<!-- 반응형 iframe 컨테이너 -->
+<div class="iframe-container">
+    <!-- iframe 태그 -->
+    <!-- src 속성은 단계 1에서 만든 파일의 경로를 지정합니다. -->
+    <!-- 만약 해당 이미지 맵 파일이 https://g69474039.github.io/HXphoto/ 에 있다면 해당 URL을 사용합니다. -->
+    <iframe class="responsive-iframe" src="https://g69474039.github.io/HXphoto/" title="이미지 맵 컨텐츠" allowfullscreen></iframe>
+    <!-- 만약 GitHub에 올리셨다면 src="https://g69474039.github.io/HXphoto/" 와 같이 변경하세요. -->
+</div>
+
+</body>
+</html>
