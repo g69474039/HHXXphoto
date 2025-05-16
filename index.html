@@ -1,11 +1,97 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 모바일 반응형을 위한 메타 태그 -->
+    <title>반응형 이미지맵 예제 (iframe 내부)</title>
+    <!-- jQuery 라이브러리 추가 (필수: rwdImageMaps.js 보다 먼저 와야 합니다) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- rwdImageMaps jQuery 플러그인 코드를 직접 붙여넣는 부분 -->
+    <script>
+        // 여기에 태산9029님께서 복사해주신 rwdImageMaps.js 코드 내용을 그대로 붙여넣습니다.
+        ;(function($) {
+            $.fn.rwdImageMaps = function() {
+                var $img = this;
+
+                var rwdImageMap = function() {
+                    $img.each(function() {
+                        if (typeof($(this).attr('usemap')) == 'undefined')
+                            return;
+
+                        var that = this,
+                            $that = $(that);
+
+                        // Since WebKit doesn't know the height until after the image has loaded, perform everything in an onload copy
+                        $('<img />').on('load', function() {
+                            var attrW = 'width',
+                                attrH = 'height',
+                                w = $that.attr(attrW),
+                                h = $that.attr(attrH);
+
+                            if (!w || !h) {
+                                var temp = new Image();
+                                temp.src = $that.attr('src');
+                                if (!w)
+                                    w = temp.width;
+                                if (!h)
+                                    h = temp.height;
+                            }
+
+                            var wPercent = $that.width()/100,
+                                hPercent = $that.height()/100,
+                                map = $that.attr('usemap').replace('#', ''),
+                                c = 'coords';
+
+                            $('map[name="' + map + '"]').find('area').each(function() {
+                                var $this = $(this);
+                                if (!$this.data(c))
+                                    $this.data(c, $this.attr(c));
+
+                                var coords = $this.data(c).split(','),
+                                    coordsPercent = new Array(coords.length);
+
+                                for (var i = 0; i < coordsPercent.length; ++i) {
+                                    if (i % 2 === 0)
+                                        coordsPercent[i] = parseInt(((coords[i]/w)*100)*wPercent);
+                                    else
+                                        coordsPercent[i] = parseInt(((coords[i]/h)*100)*hPercent);
+                                }
+                                $this.attr(c, coordsPercent.toString());
+                            });
+                        }).attr('src', $that.attr('src'));
+                    });
+                };
+                $(window).resize(rwdImageMap).trigger('resize'); // 이 부분이 윈도우 리사이즈 감지 및 좌표 업데이트
+
+                return this;
+            };
+        })(jQuery);
+    </script>
+
+    <style>
+        /* 이미지가 반응형으로 크기 조절되도록 스타일 추가 */
+        /* 이 스타일은 iframe 내부의 HTML에 적용됩니다 */
+        img[usemap] {
+            max-width: 100%; /* 부모 요소(body 또는 컨테이너)에 맞춰 최대 너비 설정 */
+            height: auto; /* 가로 세로 비율 유지 */
+            display: block; /* 이미지를 블록 요소로 만들어 하단 여백 제거 등 레이아웃 안정화 */
+        }
+        body {
+             margin: 0; /* body의 기본 마진 제거 */
+             padding: 0; /* body의 기본 패딩 제거 */
+             overflow-x: hidden; /* 가로 스크롤바 방지 */
+        }
+        html {
+            height: 100%; /* iframe 내부에서 html 요소의 높이 설정 */
+        }
+        /* 추가적인 스타일링이 필요하면 여기에 정의 */
+    </style>
 </head>
 <body>
-    
+
 <img src="https://ifh.cc/g/QLNSVS.jpg" usemap="#image-map">
-    
+
 <map name="image-map">
     <area target="_blank" alt="빗썸" title="빗썸" href="https://www.youtube.com/embed/4j3kK-pksdE?si=yiZ5EIs-HPKIDSFt" coords="129,314,93" shape="circle">
     <area target="_blank" alt="업비트" title="업비트" href="https://www.youtube.com/embed/Ifc5WujCM7Q?si=h0rg_Q7ybCuwh_0C" coords="385,317,93" shape="circle">
@@ -14,9 +100,51 @@
     <area target="_blank" alt="바이비트" title="바이비트" href="https://www.youtube.com/embed/enoxXhvlYDM?si=PQMNvdZJRHOd-6c4" coords="384,575,89" shape="circle">
     <area target="_blank" alt="트러스트 월렛" title="트러스트 월렛" href="https://www.youtube.com/embed/tUnS4yDsR94?si=55mdbi1U79wx8zYP" coords="634,581,93" shape="circle">
     <area target="_blank" alt="빗썸 전송" title="빗썸 전송" href="https://www.youtube.com/embed/_EMeowmoPr0?si=7xAQmWKbVCwjRPm1" coords="148,884,94" shape="circle">
-    <area target="_blank" alt="바이낸스에서 트러스트 전송" title="바이낸스에서 트러스트 전송" href="https://www.youtube.com/embed/DE2Su1K3fgY?si=zcu1q7GLRQjO5oJh" coords="386,877,91" shape="circle">
+    <area target="_blank" alt="바이낸스에서 트러스트 전송" title="바이낸스에서 트러스트 전송" href="https://www.youtube.com/embed/DE2Su1K3fgY?si=zcu1q7GLRQO5oJh" coords="386,877,91" shape="circle">
     <area target="_blank" alt="트러스트 월렛" title="트러스트 월렛" href="https://www.youtube.com/embed/8S5qn1EOZpY?si=ImxuTVAiaP0q8bH3&amp;amp;start=114" coords="635,879,97" shape="circle">
 </map>
+
+<!-- 플러그인 실행 코드 -->
+<script>
+$(document).ready(function() {
+    var $img = $('img[usemap]');
+
+    // Function to update image map coordinates using the plugin
+    function applyRwdImageMaps() {
+        // $.fn.rwdImageMaps가 존재하는지 확인하여 플러그인이 로드되었는지 검증
+        if (typeof $.fn.rwdImageMaps !== 'undefined' && $.fn.rwdImageMaps !== null) {
+             $img.rwdImageMaps();
+        } else {
+            console.error("rwdImageMaps plugin not loaded or available.");
+            // 플러그인 로드 실패 시 대체 로직 또는 에러 알림 처리
+        }
+    }
+
+    // --- 중요한 부분 ---
+    // 이미지가 로드되었을 때 이미지 맵을 업데이트합니다.
+    $img.on('load', function() {
+        console.log("Image loaded, applying rwdImageMaps...");
+        applyRwdImageMaps();
+        // 추가적인 안정성을 위해 이미지 로드 후 잠시 기다렸다가 한 번 더 실행
+        // 이는 CSS가 최종적으로 적용되는 시간 등을 고려합니다.
+        setTimeout(applyRwdImageMaps, 300); // 300ms 지연
+    }).each(function() {
+        // 이미지가 이미 캐시되어 바로 로드된 경우 'load' 이벤트가 발생하지 않을 수 있습니다.
+        // 이 경우를 대비하여 이미지가 로드 완료 상태(complete)이면 수동으로 'load' 이벤트를 트리거합니다.
+        if(this.complete) {
+            console.log("Image already complete, triggering load...");
+            $(this).trigger('load');
+        }
+    });
+
+    // 참고: rwdImageMaps() 함수 자체에 window.resize 이벤트 리스너가 포함되어 있습니다.
+    // 이 코드는 iframe 내부의 window 객체 리사이즈 이벤트를 감지하지만,
+    // 부모 페이지에 의해 iframe의 크기가 변할 때 내부 window의 resize 이벤트가
+    // 항상 신뢰성 있게 발생하는 것은 iframe 사용 환경에 따라 다를 수 있습니다.
+    // 따라서 이미지 로드 시점에서의 업데이트가 더 중요할 수 있습니다.
+
+});
+</script>
 
 </body>
 </html>
