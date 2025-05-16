@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반응형 이미지맵 예제</title>
+    <!-- jQuery 라이브러리 추가 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- rwdImageMaps.js 플러그인 코드를 여기에 직접 붙여넣거나, 파일 링크 -->
+    <script>
+        /*!
+         * rwdImageMaps jQuery plugin v1.5
+         *
+         * Allows image maps to be scalable.
+         *
+         * Copyright (c) 2013 Designerpoint
+         * Modified for better compatibility and simplified inclusion.
+         *
+         * Licensed under the MIT license.
+         *
+         */
+        ;(function(a){a.fn.rwdImageMaps=function(){var c=this;var b=function(){c.each(function(){if(typeof(a(this).attr("usemap"))=="undefined"){return}var e=this,d=a(e);a("<img />").on('load', function(){var g="width",f="height";var m=d.attr(g),l=d.attr(f);if(!m||!l){var n=new Image();n.src=d.attr("src");if(!m){m=n.width}if(!l){l=n.height}}var j=d.width()/100,k=d.height()/100;var h=d.attr("usemap").replace("#",""),i="coords";a('map[name="'+h+'"]').find("area").each(function(){var p=a(this);if(!p.data(i)){p.data(i,p.attr(i))}var o=p.data(i).split(",");var q=[];a.each(o,function(r){if(r%2===0){q.push(parseInt(r)*j)}else{q.push(parseInt(r)*k)}});p.attr(i,q.join(","))})}).attr("src",d.attr("src"))})};a(window).resize(b).trigger("resize");return this}};
+    })(jQuery);
+    </script>
+    <style>
+        /* 이미지가 반응형으로 크기 조절되도록 스타일 추가 */
+        img[usemap] {
+            max-width: 100%; /* 부모 요소에 맞춰 최대 너비 설정 */
+            height: auto; /* 가로 세로 비율 유지 */
+        }
+    </style>
 </head>
 <body>
-    
+
 <img src="https://ifh.cc/g/QLNSVS.jpg" usemap="#image-map">
-    
+
 <map name="image-map">
     <area target="_blank" alt="빗썸" title="빗썸" href="https://www.youtube.com/embed/4j3kK-pksdE?si=yiZ5EIs-HPKIDSFt" coords="129,314,93" shape="circle">
     <area target="_blank" alt="업비트" title="업비트" href="https://www.youtube.com/embed/Ifc5WujCM7Q?si=h0rg_Q7ybCuwh_0C" coords="385,317,93" shape="circle">
@@ -17,6 +45,16 @@
     <area target="_blank" alt="바이낸스에서 트러스트 전송" title="바이낸스에서 트러스트 전송" href="https://www.youtube.com/embed/DE2Su1K3fgY?si=zcu1q7GLRQjO5oJh" coords="386,877,91" shape="circle">
     <area target="_blank" alt="트러스트 월렛" title="트러스트 월렛" href="https://www.youtube.com/embed/8S5qn1EOZpY?si=ImxuTVAiaP0q8bH3&amp;amp;start=114" coords="635,879,97" shape="circle">
 </map>
+
+<script>
+// 문서 로드 및 이미지 준비 후 반응형 이미지맵 플러그인 실행
+$(document).ready(function() {
+    $('img[usemap]').rwdImageMaps();
+});
+
+// 이미지 크기 조절 관련 스타일 (선택 사항이지만 반응형에 도움)
+$("#img").width("100%"); // 이미지 너비를 100%로 설정하여 반응형 만듦 [[1]](https://velog.io/@sklove96/반응형-이미지맵-적용-방법)
+</script>
 
 </body>
 </html>
